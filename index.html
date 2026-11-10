@@ -37,55 +37,6 @@ body{
 .dd{position:absolute;height:auto;aspect-ratio:1/0.95;opacity:.2;filter:url(#chalk);overflow:visible}
 main.wrap{position:relative;z-index:1}
 /* めくっている間だけ、背景の絵を紙の上に出して消えないようにする */
-/* めくる紙の上にも背景の絵を写して、UIより奥に描く */
-.doodles.in-flip{position:absolute;inset:0;z-index:0}
-
-/* 紙をめくる演出 */
-.flip-stage{position:fixed;inset:0;z-index:50;perspective:1700px;pointer-events:none;overflow:hidden}
-/* ページを3本の帯に分け、入れ子で少しずつ折る→紙のたわみになる */
-.flip-seg{position:absolute;top:0;height:100%;transform-origin:left center;transform-style:preserve-3d;will-change:transform}
-.flip-stage>.flip-under{z-index:0}
-.flip-stage>.flip-cast{z-index:1}
-.flip-stage>.flip-seg{z-index:2}
-.flip-face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.flip-sheet{position:absolute;top:0;height:100%;box-sizing:border-box;background:var(--paper);background-image:var(--grain);
-  padding-top:calc(20px + env(safe-area-inset-top,0px));
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.flip-shade{position:absolute;inset:0;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,rgba(45,90,39,.03),rgba(45,90,39,.16))}
-.s1 .flip-shade{background:linear-gradient(90deg,rgba(45,90,39,.10),rgba(255,248,231,.35) 45%,rgba(45,90,39,.22))}
-.s2 .flip-shade{background:linear-gradient(90deg,rgba(255,248,231,.25),rgba(45,90,39,.32))}
-.s2 .flip-face{box-shadow:inset -2px 0 0 rgba(45,90,39,.12)}
-.flip-cast{position:absolute;inset:0;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,rgba(45,90,39,.30),rgba(45,90,39,.12) 40%,transparent 85%)}
-
-.flip-stage .s0{animation:turn0 1s cubic-bezier(.55,.05,.3,1) forwards}
-.flip-stage .s1{animation:bend1 1s ease-in-out forwards}
-.flip-stage .s2{animation:bend2 1s ease-in-out forwards}
-.flip-stage .flip-shade{animation:shadeIn 1s ease-in forwards}
-.flip-stage .flip-cast{animation:castFwd 1s ease-out forwards}
-@keyframes turn0{0%{transform:rotateY(0)}100%{transform:rotateY(-118deg)}}
-@keyframes bend1{0%{transform:rotateY(0)}30%{transform:rotateY(-20deg)}65%{transform:rotateY(-14deg)}100%{transform:rotateY(0)}}
-@keyframes bend2{0%{transform:rotateY(0)}22%{transform:rotateY(-32deg)}60%{transform:rotateY(-20deg)}100%{transform:rotateY(0)}}
-@keyframes shadeIn{to{opacity:1}}
-@keyframes castFwd{0%{opacity:.6}100%{opacity:0}}
-/* もどる：めくったページが左から戻ってくる（逆再生） */
-.flip-under{position:absolute;inset:0;overflow:hidden;background:var(--paper);background-image:var(--grain);
-  padding-top:calc(20px + env(safe-area-inset-top,0px));
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.flip-stage.rev .s0{animation:turn0r 1.05s cubic-bezier(.35,.1,.3,1) forwards}
-.flip-stage.rev .s1{animation:bend1r 1.05s ease-in-out forwards}
-.flip-stage.rev .s2{animation:bend2r 1.05s ease-in-out forwards}
-.flip-stage.rev .flip-shade{opacity:1;animation:shadeOut 1.05s ease-in forwards}
-.flip-stage.rev .flip-cast{animation:castRev 1.05s ease-in forwards}
-/* 戻るときは端が遅れてついてきて、最後にふわっと着地 */
-@keyframes turn0r{0%{transform:rotateY(-92deg)}100%{transform:rotateY(0)}}
-@keyframes bend1r{0%{transform:rotateY(-8deg)}45%{transform:rotateY(-18deg)}85%{transform:rotateY(-4deg)}93%{transform:rotateY(2deg)}100%{transform:rotateY(0)}}
-@keyframes bend2r{0%{transform:rotateY(-14deg)}50%{transform:rotateY(-30deg)}84%{transform:rotateY(-8deg)}93%{transform:rotateY(4deg)}100%{transform:rotateY(0)}}
-@keyframes shadeOut{to{opacity:0}}
-@keyframes castRev{0%{opacity:0}75%{opacity:.55}100%{opacity:0}}
-main.arrive{animation:arrive .6s .25s ease-out both}
-@keyframes arrive{from{transform:translateY(6px)}to{transform:none}}
 .wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
 .stack{display:flex;flex-direction:column;gap:28px;max-width:640px;width:100%;margin:0 auto}
 
@@ -218,17 +169,6 @@ body{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 .cards li.unfold{animation:unfold .42s cubic-bezier(.3,1.3,.5,1) both}
 @keyframes unfold{from{opacity:0;transform:translateY(-36px) scale(.94) rotate(-1deg)}}
 @media (prefers-reduced-motion:reduce){.cards li.unfold{animation:none}}
-/* 左上のホームボタン */
-.wrap{padding-top:50px}
-.home-btn{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));z-index:57;
-  width:50px;height:50px;display:grid;place-items:center;isolation:isolate}
-.home-btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;background:var(--paper);
-  box-shadow:0 3px 10px rgba(45,90,39,.14)}
-.home-btn::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;border:3px solid var(--leaf);filter:url(#chalk)}
-.home-btn svg{width:34px;height:34px;transition:transform .2s}
-.home-btn:hover svg{transform:translateY(-2px) rotate(-4deg)}
-.home-btn:active svg{transform:scale(.92)}
-.home-btn:focus-visible{outline:2px dashed var(--red);outline-offset:3px;border-radius:50%}
 /* 歯車ボタン */
 #appHead{position:relative}
 .gear{position:absolute;top:-50px;right:-2px;width:48px;height:48px;display:grid;place-items:center;border-radius:50%}
@@ -692,13 +632,6 @@ body{margin:0}
     <path d="M19.8 10.3 L22.9 10.6 L22.9 13.4 L19.8 13.7 L18.8 16.3 L20.7 18.7 L18.7 20.7 L16.3 18.8 L13.7 19.8 L13.4 22.9 L10.6 22.9 L10.3 19.8 L7.7 18.8 L5.3 20.7 L3.3 18.7 L5.2 16.3 L4.2 13.7 L1.1 13.4 L1.1 10.6 L4.2 10.3 L5.2 7.7 L3.3 5.3 L5.3 3.3 L7.7 5.2 L10.3 4.2 L10.6 1.1 L13.4 1.1 L13.7 4.2 L16.3 5.2 L18.7 3.3 L20.7 5.3 L18.8 7.7Z M15.5 12a3.5 3.5 0 1 0-7 0a3.5 3.5 0 1 0 7 0Z" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linejoin="round" filter="url(#wobble)"/>
   </svg></span><span>設定</span></button>
 </div></nav>
-<button class="home-btn" id="homeBtn" aria-label="ホームにもどる" title="ホーム"><svg viewBox="0 0 32 32" aria-hidden="true">
-  <path d="M5 16 16 6l11 10" fill="none" stroke="var(--red)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"/>
-  <path d="M8.5 15.5V26h15V15.5L16 9z" fill="var(--leaf)" filter="url(#chalk)"/>
-  <path d="M8.5 15.5V26h15V15.5" fill="none" stroke="var(--ink)" stroke-width="1.4" stroke-linejoin="round" filter="url(#wobble)"/>
-  <path d="M13.5 26v-6.5h5V26" fill="var(--ink)" filter="url(#chalk)"/>
-  <path d="M21.5 8v4" stroke="var(--red)" stroke-width="3" stroke-linecap="round" filter="url(#rough)"/>
-</svg></button>
 <div class="picker" id="picker" role="listbox" aria-label="支払った人を選ぶ" hidden></div>
 <div class="pin" id="pin" hidden role="dialog" aria-modal="true" aria-labelledby="pinTitle">
   <div class="pin-card">
@@ -1027,51 +960,8 @@ function renderHome(){
   if(q&&!hit.length)h='<li class="empty" style="grid-column:1/-1">「'+esc($("q").value.trim())+'」に合う帳面はありません。別の言葉でさがしてみてください。</li>';
   $("cards").innerHTML=h;
 }
-/* ホームが一番下のページ。帳面へ進む＝めくる、ホームへ戻る＝逆再生 */
-const snap=()=>{const c=document.querySelector("main.wrap").cloneNode(true);c.classList.remove("arrive");c.querySelectorAll("[id]").forEach(e=>e.removeAttribute("id"));return c};
-function doodleCopy(){const d=document.querySelector(".doodles").cloneNode(true);d.classList.add("in-flip");return d}
-function buildPage(){
-  const W=document.documentElement.clientWidth;
-  const ws=[Math.round(W*.46),Math.round(W*.30)];ws.push(W-ws[0]-ws[1]);
-  let root=null,parent=null,x=0;
-  ws.forEach((w,i)=>{
-    const seg=document.createElement("div");seg.className="flip-seg s"+i;
-    seg.style.width=w+"px";seg.style.left=i?"100%":"0";
-    const face=document.createElement("div");face.className="flip-face";
-    const sheet=document.createElement("div");sheet.className="flip-sheet";
-    sheet.style.width=W+"px";sheet.style.left=(-x)+"px";sheet.appendChild(doodleCopy());sheet.appendChild(snap());
-    const shade=document.createElement("div");shade.className="flip-shade";
-    face.appendChild(sheet);face.appendChild(shade);seg.appendChild(face);
-    if(parent)parent.appendChild(seg);else root=seg;
-    parent=seg;x+=w;
-  });
-  return root;
-}
-function flipTo(fn,dir){
-  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduce){fn();return}
-  window.scrollTo(0,0);
-  const back=dir==="back";
-  const stage=document.createElement("div");stage.className="flip-stage"+(back?" rev":"");stage.setAttribute("aria-hidden","true");
-  const el=c=>{const d=document.createElement("div");d.className=c;return d};
-  const cast=el("flip-cast");
-  let page;
-  if(back){
-    const under=el("flip-under");under.appendChild(doodleCopy());under.appendChild(snap());
-    fn();window.scrollTo(0,0);
-    page=buildPage();
-    stage.appendChild(under);stage.appendChild(cast);stage.appendChild(page);
-  }else{
-    page=buildPage();stage.appendChild(cast);stage.appendChild(page);
-    fn();
-    const m=document.querySelector("main.wrap");m.classList.remove("arrive");void m.offsetWidth;m.classList.add("arrive");
-  }
-  document.body.appendChild(stage);document.body.classList.add("flipping");
-  let gone=false;const done=()=>{if(!gone){gone=true;stage.remove();if(!document.querySelector(".flip-stage"))document.body.classList.remove("flipping")}};
-  page.addEventListener("animationend",e=>{if(e.target===page&&(e.animationName==="turn0"||e.animationName==="turn0r"))done()});
-  setTimeout(done,1600);
-}
-/* ページの重なり：ホーム(0) → プレビュー(1) → 編集(2) */
+/* 画面の切りかえ（演出なし） */
+function flipTo(fn){fn();window.scrollTo(0,0)}
 /* タブ：おさいふ帳(home) / カレンダー(cal) / グラフ(chart) / 設定(set)。
    プレビュー・編集は、開いたタブの上に重なるページ */
 const TABS=["home","cal","chart","set"];
@@ -1274,7 +1164,6 @@ document.addEventListener("click",e=>{
   }else if(t.id==="newSheet"){
     flipTo(()=>showEditor({id:uid(),title:"",saved:false,expenses:[]}));setTimeout(()=>$("title").focus({preventScroll:true}),900);
   }else if(t.id==="back"){leaveEditor(false)}
-  else if(t.id==="homeBtn"){goHome()}
   else if(t.id==="askSave"){if(save()){$("ask").hidden=true;goBackFromEditor()}else{$("ask").hidden=true}}
   else if(t.id==="askDiscard"){$("ask").hidden=true;goBackFromEditor()}
   else if(t.id==="askCancel"){leaveDest=null;closeAsk()}
